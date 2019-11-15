@@ -12,11 +12,13 @@ import com.example.pokedex.services.RetrofitInitializer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.widget.Toast
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var pokeList: RecyclerView
+    private lateinit var adapter: PokeAdapter
+    private var loading = true
+    private var incrementPokemon = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -26,16 +28,46 @@ class MainActivity : AppCompatActivity() {
         pokeList = findViewById(R.id.main_recyclerview)
         pokeList.layoutManager = LinearLayoutManager(this)
 
-        val adapter = PokeAdapter(this)
+        adapter = PokeAdapter(this)
 
         pokeList.adapter = adapter
 
-        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(0)
+        var pastVisiblesItems: Int
+        var visibleItemCount: Int
+        var totalItemCount: Int
+
+        pokeList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                if (dy > 0)
+                //check for scroll down
+                {
+                    visibleItemCount = pokeList.childCount
+                    totalItemCount = pokeList.layoutManager!!.itemCount
+                    pastVisiblesItems = (pokeList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+
+                    if (loading) {
+                        if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+                            loading = false
+                            Log.v("...", "Last Item Wow !")
+                            carregarApi()
+                        }
+                    }
+                }
+            }
+        })
+
+        carregarApi()
+    }
+
+    fun carregarApi() {
+        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(0, incrementPokemon * 20)
 
         call.enqueue(object: Callback<ListPokemon> {
             override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
                 response.body()?.let {
                     adapter.updateList(it.results)
+                    loading = true
+                    incrementPokemon++
                 }
             }
 
