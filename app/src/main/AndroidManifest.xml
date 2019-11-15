@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.pokedex">
-<uses-permission android:name="android.permission.INTERNET"/>
+
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -13,15 +14,17 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
-            android:name=".activity.SplashScreen">
+            android:name=".activity.PokemonDetailsActivity"
+            android:label="@string/title_activity_pokemon_details"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".activity.SplashScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.MainActivity">
-        </activity>
+        <activity android:name=".activity.MainActivity"></activity>
     </application>
 
 </manifest>

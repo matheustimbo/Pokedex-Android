@@ -9,6 +9,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
+import com.example.pokedex.activity.MainActivity
 import com.example.pokedex.modal.ListPokemon
 import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
@@ -18,7 +19,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokeAdapter(private val context: Context): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
+class PokeAdapter(private val context: Context, val listener: MainActivity): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
 
     private val pokemons = mutableListOf<Name_Url>()
 
@@ -27,7 +28,7 @@ class PokeAdapter(private val context: Context): RecyclerView.Adapter<PokeAdapte
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PokeViewHolder {
         val view = layoutInflater.inflate(R.layout.poke_cardview, parent, false)
 
-        return PokeViewHolder(view, context)
+        return PokeViewHolder(view, context, listener)
     }
 
     override fun getItemCount(): Int {
@@ -56,9 +57,15 @@ class PokeAdapter(private val context: Context): RecyclerView.Adapter<PokeAdapte
         })
     }
 
-    class PokeViewHolder(view: View, context: Context): RecyclerView.ViewHolder(view) {
+    class PokeViewHolder(view: View, context: Context, listener: PokemonClickListener): RecyclerView.ViewHolder(view) {
         val imagem: ImageView = view.findViewById(R.id.pokeImagem)
         val nome: TextView = view.findViewById(R.id.pokeTexto)
+
+        init {
+            view.setOnClickListener{
+                listener.onClick(it, adapterPosition)
+            }
+        }
     }
 
     fun updateList(pokemons: List<Name_Url>) {

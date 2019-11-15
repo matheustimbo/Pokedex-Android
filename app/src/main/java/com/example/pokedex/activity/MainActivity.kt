@@ -1,22 +1,27 @@
 package com.example.pokedex.activity
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.SystemClock
 import android.util.Log
+import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 import com.example.pokedex.adapter.PokeAdapter
+import com.example.pokedex.adapter.PokemonClickListener
 import com.example.pokedex.modal.ListPokemon
 import com.example.pokedex.services.RetrofitInitializer
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
+class MainActivity: AppCompatActivity(), PokemonClickListener {
 
     private lateinit var pokeList: RecyclerView
     private lateinit var adapter: PokeAdapter
+    private var lastClickTime = 0L
     private var loading = true
     private var incrementPokemon = 0
 
@@ -28,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         pokeList = findViewById(R.id.main_recyclerview)
         pokeList.layoutManager = LinearLayoutManager(this)
 
-        adapter = PokeAdapter(this)
+        adapter = PokeAdapter(this, this)
 
         pokeList.adapter = adapter
 
@@ -38,9 +43,8 @@ class MainActivity : AppCompatActivity() {
 
         pokeList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0)
-                //check for scroll down
-                {
+                if (dy > 0) {
+
                     visibleItemCount = pokeList.childCount
                     totalItemCount = pokeList.layoutManager!!.itemCount
                     pastVisiblesItems = (pokeList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
@@ -48,7 +52,6 @@ class MainActivity : AppCompatActivity() {
                     if (loading) {
                         if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
                             loading = false
-                            Log.v("...", "Last Item Wow !")
                             carregarApi()
                         }
                     }
@@ -66,8 +69,8 @@ class MainActivity : AppCompatActivity() {
             override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
                 response.body()?.let {
                     adapter.updateList(it.results)
-                    loading = true
                     incrementPokemon++
+                    loading = true
                 }
             }
 
@@ -75,5 +78,19 @@ class MainActivity : AppCompatActivity() {
                 Log.e("onFailure error", t?.message)
             }
         })
+    }
+
+    override fun onClick(view: View, position: Int) {
+        if (SystemClock.elapsedRealtimeNanos() - lastClickTime < 800) {
+            return
+        }
+        lastClickTime = SystemClock.elapsedRealtime()
+
+        val it = Intent(this, PokemonDetailsActivity::class.java)
+//        val img = view.findViewById<View>(R.id.imageViewCelebrityDetails)
+//        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this, img, ViewCompat.getTransitionName(img)!!)
+
+        it.putExtra("pokemon_position", position)
+        startActivity(it)
     }
 }
