@@ -63,7 +63,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
     }
 
     fun carregarApi() {
-        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(0, incrementPokemon * 20)
+        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(0, incrementPokemon * 30)
 
         call.enqueue(object: Callback<ListPokemon> {
             override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
