@@ -77,8 +77,8 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
     }
 
     fun updateList(pokemons: List<Name_Url>) {
-        this.pokemons.clear()
-        this.pokemons.addAll(pokemons)
+        val count = pokemons.count()
+        this.pokemons.addAll(pokemons.subList(count - 30, count))
         notifyDataSetChanged()
     }
 
