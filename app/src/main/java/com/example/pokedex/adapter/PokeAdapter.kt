@@ -53,7 +53,11 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
                     Picasso.get().load(it.sprites.front_default).into(holder.imagem)
                     holder.nome.text = it.name
                     holder.id.text = pokemonNumber(it.id)
-                    holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
+                    if(it.types.size !== 1) {
+                        holder.cardview.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
+                    } else {
+                        holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
+                    }
                 }
             }
 
@@ -78,7 +82,7 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
 
     fun updateList(pokemons: List<Name_Url>) {
         val count = pokemons.count()
-        this.pokemons.addAll(pokemons.subList(count - 30, count))
+        this.pokemons.addAll(pokemons.subList(count - 20, count))
         notifyDataSetChanged()
     }
 
