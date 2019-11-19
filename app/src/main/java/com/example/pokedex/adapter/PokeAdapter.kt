@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
+import androidx.constraintlayout.solver.widgets.ConstraintAnchor
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
 import com.example.pokedex.activity.MainActivity
@@ -14,6 +17,7 @@ import com.example.pokedex.modal.ListPokemon
 import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
+import com.example.pokedex.util.Type
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -47,7 +51,9 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
                     Picasso.get().load(it.sprites.front_default).into(holder.imagem)
-                    holder.nome.text = pokemonNumber(it.id) + it.name
+                    holder.nome.text = it.name
+                    holder.id.text = pokemonNumber(it.id)
+                    holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
                 }
             }
 
@@ -59,7 +65,9 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
 
     class PokeViewHolder(view: View, context: Context, listener: PokemonClickListener): RecyclerView.ViewHolder(view) {
         val imagem: ImageView = view.findViewById(R.id.pokeImagem)
-        val nome: TextView = view.findViewById(R.id.pokeTexto)
+        val nome: TextView = view.findViewById(R.id.pokemon_name)
+        val id: TextView = view.findViewById(R.id.pokemon_id)
+        val cardview: ConstraintLayout = view.findViewById(R.id.poke_cardview)
 
         init {
             view.setOnClickListener{
@@ -76,11 +84,11 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
 
     fun pokemonNumber(number: Int): String {
         if (number < 10) {
-            return "#00$number - "
+            return "#00$number"
         } else if (number < 100) {
-            return "#0$number - "
+            return "#0$number"
         } else {
-            return "#$number - "
+            return "#$number"
         }
     }
 }

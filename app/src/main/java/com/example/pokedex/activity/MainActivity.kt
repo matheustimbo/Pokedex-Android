@@ -12,6 +12,7 @@ import com.example.pokedex.R
 import com.example.pokedex.adapter.PokeAdapter
 import com.example.pokedex.adapter.PokemonClickListener
 import com.example.pokedex.modal.ListPokemon
+import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.services.RetrofitInitializer
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,6 +22,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
     private lateinit var pokeList: RecyclerView
     private lateinit var adapter: PokeAdapter
+    private val pokemons = mutableListOf<Name_Url>()
     private var lastClickTime = 0L
     private var loading = true
     private var incrementPokemon = 0
@@ -63,12 +65,13 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
     }
 
     fun carregarApi() {
-        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(0, incrementPokemon * 20)
+        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(incrementPokemon * 20)
 
         call.enqueue(object: Callback<ListPokemon> {
             override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
                 response.body()?.let {
-                    adapter.updateList(it.results)
+                    pokemons.addAll(it.results)
+                    adapter.updateList(pokemons)
                     incrementPokemon++
                     loading = true
                 }
