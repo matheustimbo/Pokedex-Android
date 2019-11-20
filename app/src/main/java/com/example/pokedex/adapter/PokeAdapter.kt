@@ -18,6 +18,7 @@ import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
 import com.example.pokedex.util.Type
+import com.google.android.material.chip.ChipGroup
 import com.squareup.picasso.Picasso
 import retrofit2.Call
 import retrofit2.Callback
@@ -58,6 +59,14 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
                     } else {
                         holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
                     }
+
+                    for (type in it.types) {
+                        val text = TextView(context)
+                        text.text = type.type.name
+                        text.textSize = 16F
+
+                        holder.chip.addView(text)
+                    }
                 }
             }
 
@@ -72,6 +81,7 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
         val nome: TextView = view.findViewById(R.id.pokemon_name)
         val id: TextView = view.findViewById(R.id.pokemon_id)
         val cardview: ConstraintLayout = view.findViewById(R.id.poke_cardview)
+        val chip: ChipGroup = view.findViewById(R.id.chip_group)
 
         init {
             view.setOnClickListener{

@@ -33,7 +33,7 @@ class PokemonDetailsActivity : AppCompatActivity() {
 
         pokemonNome = findViewById(R.id.pokemon_nome)
         pokemonImagem = findViewById(R.id.pokemon_imagem)
-        pokemonType = findViewById(R.id.list_type)
+//        pokemonType = findViewById(R.id.list_type)
 
         carregarPokemon(intent.getIntExtra("pokemon_position", 0) + 1)
     }
@@ -44,12 +44,12 @@ class PokemonDetailsActivity : AppCompatActivity() {
         call.enqueue(object: Callback<Pokemon> {
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
-                    pokemonNome.text = it.name
-                    Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
-
-                    for (type in it.types) {
-                        createType(type.type)
-                    }
+//                    pokemonNome.text = it.name
+//                    Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
+//
+//                    for (type in it.types) {
+//                        createType(type.type)
+//                    }
                 }
             }
 
