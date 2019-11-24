@@ -52,21 +52,14 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
                     Picasso.get().load(it.sprites.front_default).into(holder.imagem)
-                    holder.nome.text = it.name
-                    holder.id.text = pokemonNumber(it.id)
+                    holder.nome.text = pokemonNumber(it.id) + " - " + it.name
+
                     if(it.types.size !== 1) {
                         holder.cardview.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
                     } else {
                         holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
                     }
 
-                    for (type in it.types) {
-                        val text = TextView(context)
-                        text.text = type.type.name
-                        text.textSize = 16F
-
-                        holder.chip.addView(text)
-                    }
                 }
             }
 
@@ -78,10 +71,8 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
 
     class PokeViewHolder(view: View, context: Context, listener: PokemonClickListener): RecyclerView.ViewHolder(view) {
         val imagem: ImageView = view.findViewById(R.id.pokeImagem)
-        val nome: TextView = view.findViewById(R.id.pokemon_name)
-        val id: TextView = view.findViewById(R.id.pokemon_id)
-        val cardview: ConstraintLayout = view.findViewById(R.id.poke_cardview)
-        val chip: ChipGroup = view.findViewById(R.id.chip_group)
+        val nome: TextView = view.findViewById(R.id.poke_name)
+        val cardview: CardView = view.findViewById(R.id.poke_cardview)
 
         init {
             view.setOnClickListener{
