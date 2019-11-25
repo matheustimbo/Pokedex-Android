@@ -32,6 +32,7 @@ class PokemonDetailsActivity : AppCompatActivity() {
     private lateinit var tabs: TabLayout
     private lateinit var status: FragmentStatus
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon_details)
@@ -43,7 +44,6 @@ class PokemonDetailsActivity : AppCompatActivity() {
 //        status = FragmentStatus.newInstance()
 
         carregarPokemon(intent.getIntExtra("pokemon_position", 0) + 1)
-
     }
 
     fun carregarPokemon(pokemonNumber: Int) {
