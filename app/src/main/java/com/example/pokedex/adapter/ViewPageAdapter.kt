@@ -3,16 +3,35 @@ package com.example.pokedex.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
+import com.example.pokedex.fragments.FragmentMoves
+import com.example.pokedex.fragments.FragmentStatus
+import com.example.pokedex.modal.Pokemon
 
-class ViewPageAdapter(fragmentManager: FragmentManager) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
-
-
+class ViewPageAdapter(fragmentManager: FragmentManager, private val pokemon: Pokemon?) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
 
     override fun getCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        return 3
     }
 
     override fun getItem(position: Int): Fragment {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+        val fragment: Fragment = when (position) {
+            0 -> FragmentStatus.newInstance(pokemon)
+            1 -> FragmentMoves.newInstance("aaa", "bbb")
+            else -> FragmentMoves.newInstance("aaa", "bbb")
+
+        }
+
+        return fragment
+    }
+
+    override fun getPageTitle(position: Int): CharSequence? {
+        val title: String = when (position) {
+            0 -> "HABILIDADES"
+            1 -> "EVOLUÇÃO"
+            2 -> "STATUS"
+            else -> "noun"
+        }
+
+        return title
     }
 }

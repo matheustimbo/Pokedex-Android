@@ -1,6 +1,7 @@
 package com.example.pokedex.activity
 
 import android.annotation.SuppressLint
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.widget.ImageView
@@ -10,7 +11,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginEnd
 import androidx.core.view.marginRight
+import androidx.viewpager.widget.ViewPager
 import com.example.pokedex.R
+import com.example.pokedex.adapter.ViewPageAdapter
+import com.example.pokedex.fragments.FragmentMoves
 import com.example.pokedex.fragments.FragmentStatus
 import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
@@ -24,13 +28,18 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokemonDetailsActivity : AppCompatActivity() {
+class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInteractionListener, FragmentMoves.OnFragmentInteractionListener {
+    override fun onFragmentInteraction(uri: Uri) {
+    }
 
+    private var pokemon: Pokemon? = null
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
     private lateinit var pokemonType: ChipGroup
     private lateinit var tabs: TabLayout
     private lateinit var status: FragmentStatus
+    private lateinit var viewPage: ViewPager
+    private lateinit var viewpageadapter: ViewPageAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -40,10 +49,35 @@ class PokemonDetailsActivity : AppCompatActivity() {
         pokemonNome = findViewById(R.id.pokemon_nome)
         pokemonImagem = findViewById(R.id.pokemon_imagem)
         pokemonType = findViewById(R.id.pokemon_types)
-        tabs = findViewById(R.id.details_poketab)
-//        status = FragmentStatus.newInstance()
 
         carregarPokemon(intent.getIntExtra("pokemon_position", 0) + 1)
+
+        tabs = findViewById(R.id.details_poketab)
+        viewPage = findViewById(R.id.viewpage_details)
+
+        viewpageadapter = ViewPageAdapter(supportFragmentManager, pokemon)
+        viewPage.adapter = viewpageadapter
+
+//        viewPage.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
+//            override fun onPageScrollStateChanged(state: Int) {
+//            }
+//
+//            override fun onPageScrolled(
+//                position: Int,
+//                positionOffset: Float,
+//                positionOffsetPixels: Int
+//            ) {
+//            }
+//
+//            override fun onPageSelected(position: Int) {
+//                System.out.println(position)
+//
+//            }
+//
+//        })
+
+        tabs.setupWithViewPager(viewPage)
+
     }
 
     fun carregarPokemon(pokemonNumber: Int) {
@@ -52,12 +86,13 @@ class PokemonDetailsActivity : AppCompatActivity() {
         call.enqueue(object: Callback<Pokemon> {
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
+                    pokemon = it
                     pokemonNome.text = it.name
                     Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
 
-                    for (type in it.types) {
-                        createType(type.type)
-                    }
+//                    for (type in it.types) {
+//                        createType(type.type)
+//                    }
                 }
             }
 
