@@ -7,7 +7,8 @@ import com.example.pokedex.fragments.FragmentMoves
 import com.example.pokedex.fragments.FragmentStatus
 import com.example.pokedex.modal.Pokemon
 
-class ViewPageAdapter(fragmentManager: FragmentManager, private val pokemon: Pokemon?) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+class ViewPageAdapter(fragmentManager: FragmentManager, val pokemonId: Int) : FragmentPagerAdapter(fragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
+
 
     override fun getCount(): Int {
         return 3
@@ -15,7 +16,7 @@ class ViewPageAdapter(fragmentManager: FragmentManager, private val pokemon: Pok
 
     override fun getItem(position: Int): Fragment {
         val fragment: Fragment = when (position) {
-            0 -> FragmentStatus.newInstance(pokemon)
+            0 -> FragmentStatus.newInstance(pokemonId)
             1 -> FragmentMoves.newInstance("aaa", "bbb")
             else -> FragmentMoves.newInstance("aaa", "bbb")
 

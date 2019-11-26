@@ -11,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.marginEnd
 import androidx.core.view.marginRight
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.example.pokedex.R
 import com.example.pokedex.adapter.ViewPageAdapter
@@ -32,7 +34,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     override fun onFragmentInteraction(uri: Uri) {
     }
 
-    private var pokemon: Pokemon? = null
+    private var pokemonId = 0
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
     private lateinit var pokemonType: ChipGroup
@@ -40,23 +42,27 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     private lateinit var status: FragmentStatus
     private lateinit var viewPage: ViewPager
     private lateinit var viewpageadapter: ViewPageAdapter
+    private lateinit var constraintLayout: ConstraintLayout
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon_details)
 
+        pokemonId = intent.getIntExtra("pokemon_position", 0) + 1
         pokemonNome = findViewById(R.id.pokemon_nome)
         pokemonImagem = findViewById(R.id.pokemon_imagem)
         pokemonType = findViewById(R.id.pokemon_types)
+        constraintLayout = findViewById(R.id.constraintLayout_details)
 
-        carregarPokemon(intent.getIntExtra("pokemon_position", 0) + 1)
+        carregarPokemon(pokemonId)
 
         tabs = findViewById(R.id.details_poketab)
         viewPage = findViewById(R.id.viewpage_details)
 
-        viewpageadapter = ViewPageAdapter(supportFragmentManager, pokemon)
+        viewpageadapter = ViewPageAdapter(supportFragmentManager, pokemonId)
         viewPage.adapter = viewpageadapter
+
 
 //        viewPage.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
 //            override fun onPageScrollStateChanged(state: Int) {
@@ -86,13 +92,18 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         call.enqueue(object: Callback<Pokemon> {
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
-                    pokemon = it
                     pokemonNome.text = it.name
                     Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
 
-//                    for (type in it.types) {
-//                        createType(type.type)
-//                    }
+                    if(it.types.size !== 1) {
+                        constraintLayout.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
+                    } else {
+                        constraintLayout.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
+                    }
+
+                    for (type in it.types) {
+                        createType(type.type)
+                    }
                 }
             }
 
