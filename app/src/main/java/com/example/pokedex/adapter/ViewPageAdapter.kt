@@ -16,8 +16,9 @@ class ViewPageAdapter(fragmentManager: FragmentManager, val pokemonId: Int) : Fr
 
     override fun getItem(position: Int): Fragment {
         val fragment: Fragment = when (position) {
-            0 -> FragmentStatus.newInstance(pokemonId)
+            0 -> FragmentMoves.newInstance("aaa", "bbb")
             1 -> FragmentMoves.newInstance("aaa", "bbb")
+            2 -> FragmentStatus.newInstance(pokemonId)
             else -> FragmentMoves.newInstance("aaa", "bbb")
 
         }

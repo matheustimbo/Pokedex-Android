@@ -14,8 +14,6 @@ import android.widget.TextView
 import com.example.pokedex.R
 import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
-import com.squareup.picasso.Picasso
-import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -44,7 +42,7 @@ class FragmentStatus : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
-
+            carregarPokemon(it.getInt("id"))
         }
     }
 
@@ -95,7 +93,10 @@ class FragmentStatus : Fragment() {
         @JvmStatic
         fun newInstance(pokemon: Int) =
             FragmentStatus().apply {
-                carregarPokemon(pokemon)
+                arguments = Bundle().apply {
+                    putInt("id", pokemon)
+                }
+//                carregarPokemon(pokemon)
 
             }
     }

@@ -26,7 +26,7 @@ import retrofit2.Response
 
 class PokeAdapter(private val context: Context, val listener: MainActivity): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
 
-    private val pokemons = mutableListOf<Name_Url>()
+    private val pokemons = mutableListOf<Pokemon>()
 
     private val layoutInflater = context.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
 
@@ -43,30 +43,16 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val pokemon = pokemons[position]
 
-        val path = pokemon.url.substring(34)
-        val call = RetrofitInitializer.pokeApi.pokeService().pokemon(path)
 
+        Picasso.get().load(pokemon.sprites.front_default).into(holder.imagem)
+        holder.nome.text = pokemonNumber(pokemon.id) + " - " + pokemon.name
 
+        if(pokemon.types.size != 1) {
+            holder.cardview.setBackgroundResource(Type.valueOf(pokemon.types[1].type.name.toUpperCase()).getColor())
+        } else {
+            holder.cardview.setBackgroundResource(Type.valueOf(pokemon.types[0].type.name.toUpperCase()).getColor())
+        }
 
-        call.enqueue(object: Callback<Pokemon> {
-            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                response.body()?.let {
-                    Picasso.get().load(it.sprites.front_default).into(holder.imagem)
-                    holder.nome.text = pokemonNumber(it.id) + " - " + it.name
-
-                    if(it.types.size !== 1) {
-                        holder.cardview.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
-                    } else {
-                        holder.cardview.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
-                    }
-
-                }
-            }
-
-            override fun onFailure(call: Call<Pokemon>, t: Throwable?) {
-                Log.e("onFailure error", t?.message)
-            }
-        })
     }
 
     class PokeViewHolder(view: View, context: Context, listener: PokemonClickListener): RecyclerView.ViewHolder(view) {
@@ -81,9 +67,10 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
         }
     }
 
-    fun updateList(pokemons: List<Name_Url>) {
+    fun updateList(pokemons: List<Pokemon>) {
         val count = pokemons.count()
         this.pokemons.addAll(pokemons.subList(count - 20, count))
+        this.pokemons.sortBy { it.id }
         notifyDataSetChanged()
     }
 

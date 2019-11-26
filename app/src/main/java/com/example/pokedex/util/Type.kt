@@ -4,6 +4,10 @@ import com.example.pokedex.R
 
 enum class Type {
     WATER {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_water
+        }
+
         override fun getColor(): Int {
             return R.color.water
         }
@@ -14,6 +18,10 @@ enum class Type {
     },
 
     FIRE {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_fire
+        }
+
         override fun getColor(): Int {
             return R.color.fire
         }
@@ -24,6 +32,10 @@ enum class Type {
     },
 
     GRASS {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_grass
+        }
+
         override fun getColor(): Int {
             return R.color.grass
         }
@@ -34,6 +46,10 @@ enum class Type {
     },
 
     GROUND {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_ground
+        }
+
         override fun getColor(): Int {
             return R.color.ground
         }
@@ -44,6 +60,10 @@ enum class Type {
     },
 
     ROCK {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_rock
+        }
+
         override fun getColor(): Int {
             return R.color.rock
         }
@@ -54,6 +74,10 @@ enum class Type {
     },
 
     STEEL {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_steel
+        }
+
         override fun getColor(): Int {
             return R.color.steel
         }
@@ -64,6 +88,10 @@ enum class Type {
     },
 
     ICE {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_ice
+        }
+
         override fun getColor(): Int {
             return R.color.ice
         }
@@ -74,6 +102,10 @@ enum class Type {
     },
 
     ELECTRIC {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_electric
+        }
+
         override fun getColor(): Int {
             return R.color.electric
         }
@@ -84,6 +116,10 @@ enum class Type {
     },
 
     DRAGON {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_dragon
+        }
+
         override fun getColor(): Int {
             return R.color.dragon
         }
@@ -94,6 +130,10 @@ enum class Type {
     },
 
     GHOST {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_ghost
+        }
+
         override fun getColor(): Int {
             return R.color.ghost
         }
@@ -104,6 +144,10 @@ enum class Type {
     },
 
     PSYCHIC {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_psychic
+        }
+
         override fun getColor(): Int {
             return R.color.psychic
         }
@@ -114,6 +158,10 @@ enum class Type {
     },
 
     NORMAL {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_normal
+        }
+
         override fun getColor(): Int {
             return R.color.normal
         }
@@ -124,6 +172,10 @@ enum class Type {
     },
 
     FIGHTING {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_figthing
+        }
+
         override fun getColor(): Int {
             return R.color.fighting
         }
@@ -134,6 +186,10 @@ enum class Type {
     },
 
     POISON {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_poison
+        }
+
         override fun getColor(): Int {
             return R.color.poison
         }
@@ -144,6 +200,10 @@ enum class Type {
     },
 
     BUG {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_bug
+        }
+
         override fun getColor(): Int {
             return R.color.bug
         }
@@ -154,6 +214,10 @@ enum class Type {
     },
 
     FLYING {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_flying
+        }
+
         override fun getColor(): Int {
             return R.color.flying
         }
@@ -164,6 +228,10 @@ enum class Type {
     },
 
     DARK {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_dark
+        }
+
         override fun getColor(): Int {
             return R.color.dark
         }
@@ -174,6 +242,10 @@ enum class Type {
     },
 
     FAIRY {
+        override fun getLinearLayout(): Int {
+            return R.id.linear_layout_fairy
+        }
+
         override fun getColor(): Int {
             return R.color.fairy
         }
@@ -187,4 +259,6 @@ enum class Type {
     abstract fun getImagem(): Int
 
     abstract fun getColor(): Int
+
+    abstract fun getLinearLayout(): Int
 }

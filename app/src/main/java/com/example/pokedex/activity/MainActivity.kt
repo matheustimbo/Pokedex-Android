@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.pokedex.R
@@ -13,7 +15,11 @@ import com.example.pokedex.adapter.PokeAdapter
 import com.example.pokedex.adapter.PokemonClickListener
 import com.example.pokedex.modal.ListPokemon
 import com.example.pokedex.modal.Name_Url
+import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
+import com.example.pokedex.util.Type
+import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -23,6 +29,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
     private lateinit var pokeList: RecyclerView
     private lateinit var adapter: PokeAdapter
     private val pokemons = mutableListOf<Name_Url>()
+    private val pokeLive = MutableLiveData<List<Pokemon>>()
     private var lastClickTime = 0L
     private var loading = true
     private var incrementPokemon = 0
@@ -62,6 +69,11 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
         })
 
         carregarApi()
+
+        pokeLive.observe(this, Observer {
+            adapter.updateList(it)
+            progress_bar_main.visibility = View.GONE
+        })
     }
 
     fun carregarApi() {
@@ -71,9 +83,12 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
             override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
                 response.body()?.let {
                     pokemons.addAll(it.results)
-                    adapter.updateList(pokemons)
+//                    adapter.updateList(pokemons)
+
+                    urlToPokemon(it.results)
                     incrementPokemon++
                     loading = true
+
                 }
             }
 
@@ -95,5 +110,35 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         it.putExtra("pokemon_position", position)
         startActivity(it)
+    }
+
+    fun urlToPokemon(lista: List<Name_Url>) {
+        progress_bar_main.visibility = View.VISIBLE
+
+        val poke = mutableListOf<Pokemon>()
+        var count = 0
+
+        lista.forEach {
+            val path = it.url.substring(34)
+            val call = RetrofitInitializer.pokeApi.pokeService().pokemon(path)
+
+            call.enqueue(object: Callback<Pokemon> {
+                override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                    response.body()?.let { currentPokemon ->
+                        poke.add(currentPokemon)
+                        count++
+
+                        if(count === 20) {
+                            pokeLive.postValue(poke)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Pokemon>, t: Throwable?) {
+                    count++
+                    Log.e("onFailure error", t?.message)
+                }
+            })
+        }
     }
 }

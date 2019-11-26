@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -37,7 +38,6 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     private var pokemonId = 0
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
-    private lateinit var pokemonType: ChipGroup
     private lateinit var tabs: TabLayout
     private lateinit var status: FragmentStatus
     private lateinit var viewPage: ViewPager
@@ -52,7 +52,6 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         pokemonId = intent.getIntExtra("pokemon_position", 0) + 1
         pokemonNome = findViewById(R.id.pokemon_nome)
         pokemonImagem = findViewById(R.id.pokemon_imagem)
-        pokemonType = findViewById(R.id.pokemon_types)
         constraintLayout = findViewById(R.id.constraintLayout_details)
 
         carregarPokemon(pokemonId)
@@ -90,6 +89,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         val call = RetrofitInitializer.pokeApi.pokeService().pokemon(pokemonNumber.toString())
 
         call.enqueue(object: Callback<Pokemon> {
+            @SuppressLint("DefaultLocale")
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
                     pokemonNome.text = it.name
@@ -101,8 +101,9 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                         constraintLayout.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
                     }
 
-                    for (type in it.types) {
-                        createType(type.type)
+                    it.types.forEach { type ->
+                        findViewById<LinearLayout>(Type.valueOf(type.type.name.toUpperCase()).getLinearLayout()).visibility = View.VISIBLE
+
                     }
                 }
             }
@@ -111,23 +112,5 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                 Log.e("onFailure error", t?.message)
             }
         })
-    }
-
-    @SuppressLint("DefaultLocale")
-    fun createType(info: Name_Url) {
-        val content = ConstraintLayout(this)
-        val type = TextView(this)
-        type.text = info.name
-//        val image = ImageView(this)
-
-
-//        image.setImageResource(Type.valueOf(info.name.toUpperCase()).getImagem())
-//        image.scaleX = .1F
-//        image.scaleY = .1F
-//
-//        content.addView(image)
-        content.addView(type)
-
-        pokemonType.addView(content)
     }
 }
