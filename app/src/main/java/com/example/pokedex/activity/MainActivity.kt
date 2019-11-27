@@ -46,6 +46,8 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         pokeList.adapter = adapter
 
+        progress_bar_main.visibility = View.VISIBLE
+
         var pastVisiblesItems: Int
         var visibleItemCount: Int
         var totalItemCount: Int

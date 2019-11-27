@@ -37,10 +37,8 @@ class FragmentStatus : Fragment() {
     private lateinit var attsBar: ProgressBar
     private lateinit var dfssBar: ProgressBar
 
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onResume() {
+        super.onResume()
         arguments?.let {
             carregarPokemon(it.getInt("id"))
         }
@@ -62,6 +60,14 @@ class FragmentStatus : Fragment() {
         speedBar = root.findViewById(R.id.speed_bar)
         attsBar = root.findViewById(R.id.atts_bar)
         dfssBar = root.findViewById(R.id.dfss_bar)
+
+        hpBar.max = 300
+        attBar.max = 300
+        dfsBar.max = 300
+        speedBar.max = 300
+        attsBar.max = 300
+        dfssBar.max = 300
+
 
         return root
     }

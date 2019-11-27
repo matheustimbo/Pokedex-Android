@@ -18,12 +18,13 @@
 
         <ImageView
             android:id="@+id/pokemon_imagem"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
             android:layout_marginStart="24dp"
             android:layout_marginTop="24dp"
             android:adjustViewBounds="true"
             android:cropToPadding="true"
+            android:scaleType="fitCenter"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             tools:srcCompat="@tools:sample/avatars" />
@@ -35,13 +36,14 @@
             android:layout_marginTop="32dp"
             android:gravity="center"
             android:text="Pokemon_nome"
-            android:textColor="#000000"
+            android:textColor="#FFFFFF"
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/pokemon_imagem"
             app:layout_constraintTop_toTopOf="parent" />
 
         <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="24dp"
@@ -67,7 +69,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="ELECTRIC" />
+                    android:text="ELECTRIC"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -90,7 +93,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="GROUND" />
+                    android:text="GROUND"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -113,7 +117,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="WATER" />
+                    android:text="WATER"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -136,7 +141,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="FIRE" />
+                    android:text="FIRE"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -159,7 +165,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="GRASS" />
+                    android:text="GRASS"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -183,7 +190,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="STEEL" />
+                    android:text="STEEL"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -206,7 +214,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="ROCK" />
+                    android:text="ROCK"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -229,7 +238,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="PSYCHIC" />
+                    android:text="PSYCHIC"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -252,7 +262,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="POISON" />
+                    android:text="POISON"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -275,7 +286,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="NORMAL" />
+                    android:text="NORMAL"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -298,7 +310,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="ICE" />
+                    android:text="ICE"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -321,7 +334,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="GHOST" />
+                    android:text="GHOST"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -344,7 +358,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="FLYING" />
+                    android:text="FLYING"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -367,7 +382,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="FIGTHING" />
+                    android:text="FIGTHING"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -390,7 +406,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="FAIRY" />
+                    android:text="FAIRY"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -413,7 +430,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="DRAGON" />
+                    android:text="DRAGON"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -436,7 +454,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="DARK" />
+                    android:text="DARK"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -459,7 +478,8 @@
                     android:layout_height="match_parent"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:text="BUG" />
+                    android:text="BUG"
+                    android:textColor="#FFFFFF" />
 
                 <ImageView
                     android:layout_width="10dp"
@@ -471,6 +491,18 @@
             </LinearLayout>
 
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/poke_id"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="TextView"
+            android:textColor="#FFFFFF"
+            android:textSize="20sp"
+            app:layout_constraintEnd_toStartOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/pokemon_imagem" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -514,8 +546,9 @@
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="32dp"
-            android:layout_marginTop="24dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="32dp"
+            android:layout_marginBottom="8dp"
             android:foregroundGravity="center"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

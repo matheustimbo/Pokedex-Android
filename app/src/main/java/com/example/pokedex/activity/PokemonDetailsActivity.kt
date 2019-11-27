@@ -17,6 +17,7 @@ import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.example.pokedex.R
 import com.example.pokedex.adapter.ViewPageAdapter
+import com.example.pokedex.fragments.FragmentEvolution
 import com.example.pokedex.fragments.FragmentMoves
 import com.example.pokedex.fragments.FragmentStatus
 import com.example.pokedex.modal.Name_Url
@@ -31,13 +32,14 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInteractionListener, FragmentMoves.OnFragmentInteractionListener {
+class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInteractionListener, FragmentMoves.OnFragmentInteractionListener, FragmentEvolution.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
     }
 
     private var pokemonId = 0
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
+    private lateinit var pokeId: TextView
     private lateinit var tabs: TabLayout
     private lateinit var status: FragmentStatus
     private lateinit var viewPage: ViewPager
@@ -53,6 +55,8 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         pokemonNome = findViewById(R.id.pokemon_nome)
         pokemonImagem = findViewById(R.id.pokemon_imagem)
         constraintLayout = findViewById(R.id.constraintLayout_details)
+        pokeId = findViewById(R.id.poke_id)
+        pokeId.text = pokemonNumber(pokemonId)
 
         carregarPokemon(pokemonId)
 
@@ -112,5 +116,15 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                 Log.e("onFailure error", t?.message)
             }
         })
+    }
+
+    fun pokemonNumber(number: Int): String {
+        if (number < 10) {
+            return "#00$number"
+        } else if (number < 100) {
+            return "#0$number"
+        } else {
+            return "#$number"
+        }
     }
 }
