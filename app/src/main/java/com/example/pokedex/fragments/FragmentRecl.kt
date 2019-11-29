@@ -4,13 +4,14 @@ import android.content.Context
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.util.Xml
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.example.pokedex.R
 import com.example.pokedex.modal.Pokemon
@@ -18,14 +19,15 @@ import com.example.pokedex.modal.evolution.Evolution
 import com.example.pokedex.modal.specie.Specie
 import com.example.pokedex.services.RetrofitInitializer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_pokemon_details.*
+import kotlinx.android.synthetic.main.activity_pokemon_details.view.*
 import kotlinx.android.synthetic.main.fragment_fragment_evolution.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+class FragmentRecl : Fragment() {
 
-class FragmentEvolution : Fragment() {
+    private lateinit var recyclerView: RecyclerView
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -33,11 +35,15 @@ class FragmentEvolution : Fragment() {
         super.onResume()
         arguments?.let {
             pokemonSpecies(it.getInt("id"))
+
         }
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val root = inflater.inflate(R.layout.fragment_fragment_evolution, container, false)
+        val root = inflater.inflate(R.layout.fragment_fragment_recl, container, false)
+
+        recyclerView = root.findViewById(R.id.recycler_evolution)
+        recyclerView.layoutManager = LinearLayoutManager(root.context)
 
         return root
     }
@@ -68,7 +74,7 @@ class FragmentEvolution : Fragment() {
 
         @JvmStatic
         fun newInstance(pokemon: Int) =
-            FragmentEvolution().apply {
+            FragmentRecl().apply {
                 arguments = Bundle().apply {
                     putInt("id", pokemon)
                 }
@@ -176,5 +182,4 @@ class FragmentEvolution : Fragment() {
             return "#$number"
         }
     }
-
 }

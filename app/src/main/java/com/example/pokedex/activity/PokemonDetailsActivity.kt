@@ -4,7 +4,9 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
+import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
@@ -28,6 +30,7 @@ import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.view.*
+import kotlinx.android.synthetic.main.activity_splash_screen.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -47,6 +50,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     private lateinit var constraintLayout: ConstraintLayout
 
 
+    @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon_details)
@@ -66,25 +70,6 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         viewpageadapter = ViewPageAdapter(supportFragmentManager, pokemonId)
         viewPage.adapter = viewpageadapter
 
-
-//        viewPage.addOnPageChangeListener(object: ViewPager.OnPageChangeListener {
-//            override fun onPageScrollStateChanged(state: Int) {
-//            }
-//
-//            override fun onPageScrolled(
-//                position: Int,
-//                positionOffset: Float,
-//                positionOffsetPixels: Int
-//            ) {
-//            }
-//
-//            override fun onPageSelected(position: Int) {
-//                System.out.println(position)
-//
-//            }
-//
-//        })
-
         tabs.setupWithViewPager(viewPage)
 
     }
@@ -99,7 +84,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                     pokemonNome.text = it.name
                     Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
 
-                    if(it.types.size !== 1) {
+                    if(it.types.size != 1) {
                         constraintLayout.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
                     } else {
                         constraintLayout.setBackgroundResource(Type.valueOf(it.types[0].type.name.toUpperCase()).getColor())
