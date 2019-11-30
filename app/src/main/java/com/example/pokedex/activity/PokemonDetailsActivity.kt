@@ -4,38 +4,28 @@ import android.annotation.SuppressLint
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.core.view.marginEnd
-import androidx.core.view.marginRight
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.viewpager.widget.ViewPager
 import com.example.pokedex.R
 import com.example.pokedex.adapter.ViewPageAdapter
-import com.example.pokedex.fragments.FragmentEvolution
 import com.example.pokedex.fragments.FragmentMoves
+import com.example.pokedex.fragments.FragmentRecl
 import com.example.pokedex.fragments.FragmentStatus
-import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
 import com.example.pokedex.util.Type
-import com.google.android.material.chip.ChipGroup
 import com.google.android.material.tabs.TabLayout
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_main.view.*
-import kotlinx.android.synthetic.main.activity_splash_screen.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInteractionListener, FragmentMoves.OnFragmentInteractionListener, FragmentEvolution.OnFragmentInteractionListener {
+class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInteractionListener, FragmentMoves.OnFragmentInteractionListener, FragmentRecl.OnFragmentInteractionListener {
     override fun onFragmentInteraction(uri: Uri) {
     }
 

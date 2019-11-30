@@ -44,7 +44,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/poke_id1"
+                android:id="@+id/poke_name_evolution1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -85,7 +85,7 @@
                 android:textSize="18sp" />
 
             <TextView
-                android:id="@+id/poke_id2"
+                android:id="@+id/poke_name_evolution1"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

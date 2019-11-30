@@ -3,8 +3,8 @@ package com.example.pokedex.adapter
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentPagerAdapter
-import com.example.pokedex.fragments.FragmentEvolution
 import com.example.pokedex.fragments.FragmentMoves
+import com.example.pokedex.fragments.FragmentRecl
 import com.example.pokedex.fragments.FragmentStatus
 import com.example.pokedex.modal.Pokemon
 
@@ -18,7 +18,7 @@ class ViewPageAdapter(fragmentManager: FragmentManager, val pokemonId: Int) : Fr
     override fun getItem(position: Int): Fragment {
         val fragment: Fragment = when (position) {
             0 -> FragmentMoves.newInstance(pokemonId)
-            1 -> FragmentEvolution.newInstance(pokemonId)
+            1 -> FragmentRecl.newInstance(pokemonId)
             2 -> FragmentStatus.newInstance(pokemonId)
             else -> FragmentMoves.newInstance(pokemonId)
         }

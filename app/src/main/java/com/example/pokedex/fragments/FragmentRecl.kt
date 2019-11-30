@@ -14,12 +14,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.example.pokedex.R
+import com.example.pokedex.adapter.AdapterEvolution
 import com.example.pokedex.modal.Pokemon
+import com.example.pokedex.modal.PokemonEvolution
 import com.example.pokedex.modal.evolution.Evolution
+import com.example.pokedex.modal.evolution.EvolvesTo
 import com.example.pokedex.modal.specie.Specie
 import com.example.pokedex.services.RetrofitInitializer
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_pokemon_details.view.*
 import kotlinx.android.synthetic.main.fragment_fragment_evolution.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -28,6 +30,7 @@ import retrofit2.Response
 class FragmentRecl : Fragment() {
 
     private lateinit var recyclerView: RecyclerView
+    private lateinit var adapter: AdapterEvolution
 
     private var listener: OnFragmentInteractionListener? = null
 
@@ -44,6 +47,10 @@ class FragmentRecl : Fragment() {
 
         recyclerView = root.findViewById(R.id.recycler_evolution)
         recyclerView.layoutManager = LinearLayoutManager(root.context)
+
+        adapter = AdapterEvolution(root.context)
+
+        recyclerView.adapter = adapter
 
         return root
     }
@@ -105,48 +112,12 @@ class FragmentRecl : Fragment() {
         call.enqueue(object: Callback<Evolution> {
             override fun onResponse(call: Call<Evolution>, response: Response<Evolution>) {
                 response.body()?.let { evolution ->
-                    var chain = evolution.chain.evolves_to
-                    var count = 1
-                    val pokeName = mutableListOf<String>()
-                    pokeName.add(evolution.chain.species.name)
+                    val chain = evolution.chain
+                    val pokeList = mutableListOf<PokemonEvolution>()
 
-                    while (chain.size != 0) {
-                        count++
-                        pokeName.add(chain[0].species.name)
-                        chain = chain[0].evolves_to
-                    }
+                    chainRecursivo(chain, pokeList)
 
-                    when (count){
-                        1 -> {
-                            poke_layout1.visibility = View.VISIBLE
-                            poke_nome1.text = pokeName[0]
-                            carregarPokemon(pokeName[0], poke_imagem1, poke_id1)
-                        }
-
-                        2 -> {
-                            poke_layout1.visibility = View.VISIBLE
-                            carregarPokemon(pokeName[0], poke_imagem1, poke_id1)
-                            poke_nome1.text = pokeName[0]
-
-                            poke_layout2.visibility = View.VISIBLE
-                            carregarPokemon(pokeName[1], poke_imagem2, poke_id2)
-                            poke_nome2.text = pokeName[1]
-                        }
-
-                        3 -> {
-                            poke_layout1.visibility = View.VISIBLE
-                            carregarPokemon(pokeName[0], poke_imagem1, poke_id1)
-                            poke_nome1.text = pokeName[0]
-
-                            poke_layout2.visibility = View.VISIBLE
-                            carregarPokemon(pokeName[1], poke_imagem2, poke_id2)
-                            poke_nome2.text = pokeName[1]
-
-                            poke_layout3.visibility = View.VISIBLE
-                            carregarPokemon(pokeName[2], poke_imagem3, poke_id3)
-                            poke_nome3.text = pokeName[2]
-                        }
-                    }
+                    adapter.updateList(pokeList)
                 }
             }
 
@@ -156,30 +127,14 @@ class FragmentRecl : Fragment() {
         })
     }
 
-    fun carregarPokemon(pokemonName: String, target: ImageView, id: TextView) {
-        val call = RetrofitInitializer.pokeApi.pokeService().pokemon(pokemonName)
+    fun chainRecursivo(chain: EvolvesTo, list: MutableList<PokemonEvolution>) {
+        val namePoke = chain.species.name
 
-        call.enqueue(object: Callback<Pokemon> {
-            override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
-                response.body()?.let {
-                    Picasso.get().load(it.sprites.front_default).into(target)
-                    id.text = pokemonNumber(it.id)
-                }
+        chain.evolves_to.forEach {
+            if (it.evolves_to.size != 0) {
+                chainRecursivo(it, list)
             }
-
-            override fun onFailure(call: Call<Pokemon>, t: Throwable?) {
-                Log.e("onFailure error", t?.message)
-            }
-        })
-    }
-
-    fun pokemonNumber(number: Int): String {
-        if (number < 10) {
-            return "#00$number"
-        } else if (number < 100) {
-            return "#0$number"
-        } else {
-            return "#$number"
+            list.add(PokemonEvolution(namePoke, it.species.name))
         }
     }
 }
