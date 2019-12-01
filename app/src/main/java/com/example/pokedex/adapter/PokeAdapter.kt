@@ -50,7 +50,6 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
         val pokemon = pokemons[position]
         var ids = if (sharedPref.all["favIds"].toString() == "null") "".split(", ").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
         var isFav = false
-        System.out.println(sharedPref.all["favIds"])
 
         Picasso.get().load(pokemon.sprites.front_default).into(holder.imagem)
         holder.nome.text = pokemonNumber(pokemon.id) + " - " + pokemon.name
@@ -102,7 +101,6 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             }
 
             sharedPref.edit().putString("favIds", update).apply()
-
         }
 
     }
@@ -140,6 +138,11 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
     fun updateFav(pokemons: List<Pokemon>) {
         this.pokemons.clear()
         this.pokemons.addAll(pokemons)
+        notifyDataSetChanged()
+    }
+
+    fun clear() {
+        this.pokemons.clear()
         notifyDataSetChanged()
     }
 }

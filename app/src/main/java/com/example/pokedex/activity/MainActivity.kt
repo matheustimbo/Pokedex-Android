@@ -1,5 +1,6 @@
 package com.example.pokedex.activity
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
@@ -20,8 +21,6 @@ import com.example.pokedex.modal.ListPokemon
 import com.example.pokedex.modal.Name_Url
 import com.example.pokedex.modal.Pokemon
 import com.example.pokedex.services.RetrofitInitializer
-import com.example.pokedex.util.Type
-import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Callback
@@ -37,20 +36,22 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
     private var lastClickTime = 0L
     private var loading = true
     private var incrementPokemon = 0
+    private var isFav = false
+    private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        sharedPref = getSharedPreferences("poke-favoritos", 0)
+
         pokeList = findViewById(R.id.main_recyclerview)
         pokeList.layoutManager = LinearLayoutManager(this)
 
         fav = findViewById(R.id.fav_button)
         fav.setColorFilter(ContextCompat.getColor(this, R.color.BLACK), android.graphics.PorterDuff.Mode.SRC_IN)
-        fav.setOnClickListener {
 
-        }
 
 
         adapter = PokeAdapter(this, this)
@@ -65,49 +66,46 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         pokeList.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (dy > 0) {
+                if (!isFav) {
+                    if (dy > 0) {
 
-                    visibleItemCount = pokeList.childCount
-                    totalItemCount = pokeList.layoutManager!!.itemCount
-                    pastVisiblesItems = (pokeList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
+                        visibleItemCount = pokeList.childCount
+                        totalItemCount = pokeList.layoutManager!!.itemCount
+                        pastVisiblesItems = (pokeList.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()
 
-                    if (loading) {
-                        if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
-                            loading = false
-                            carregarApi()
+                        if (loading) {
+                            if (visibleItemCount + pastVisiblesItems >= totalItemCount) {
+                                loading = false
+                                carregarApi()
+                            }
                         }
                     }
                 }
             }
         })
 
+        fav.setOnClickListener {
+            val ids = (sharedPref.all["favIds"] as CharSequence).split(", ").toMutableList().filterNot { it == "" }
+            val pokemonFav = mutableListOf<Pokemon>()
+            isFav = !isFav
+
+            if (isFav) {
+                fav.setColorFilter(ContextCompat.getColor(this, R.color.RED), android.graphics.PorterDuff.Mode.SRC_IN)
+                loadPokemonFav(ids, pokemonFav)
+
+            } else {
+                fav.setColorFilter(ContextCompat.getColor(this, R.color.BLACK), android.graphics.PorterDuff.Mode.SRC_IN)
+                incrementPokemon = 0
+                adapter.clear()
+                carregarApi()
+            }
+        }
+
         carregarApi()
 
         pokeLive.observe(this, Observer {
             adapter.updateList(it)
             progress_bar_main.visibility = View.GONE
-        })
-    }
-
-    fun carregarApi() {
-        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(incrementPokemon * 20)
-
-        call.enqueue(object: Callback<ListPokemon> {
-            override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
-                response.body()?.let {
-                    pokemons.addAll(it.results)
-//                    adapter.updateList(pokemons)
-
-                    urlToPokemon(it.results)
-                    incrementPokemon++
-                    loading = true
-
-                }
-            }
-
-            override fun onFailure(call: Call<ListPokemon>, t: Throwable?) {
-                Log.e("onFailure error", t?.message)
-            }
         })
     }
 
@@ -121,6 +119,26 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         it.putExtra("pokemon_position", position)
         startActivity(it)
+    }
+
+    fun carregarApi() {
+        val call = RetrofitInitializer.pokeApi.pokeService().ListPokemon(incrementPokemon * 20)
+
+        call.enqueue(object: Callback<ListPokemon> {
+            override fun onResponse(call: Call<ListPokemon>, response: Response<ListPokemon>) {
+                response.body()?.let {
+                    pokemons.addAll(it.results)
+
+                    urlToPokemon(it.results)
+                    incrementPokemon++
+                    loading = true
+                }
+            }
+
+            override fun onFailure(call: Call<ListPokemon>, t: Throwable?) {
+                Log.e("onFailure error", t?.message)
+            }
+        })
     }
 
     fun urlToPokemon(lista: List<Name_Url>) {
@@ -146,10 +164,55 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
                 }
 
                 override fun onFailure(call: Call<Pokemon>, t: Throwable?) {
-                    count++
                     Log.e("onFailure error", t?.message)
+
+                    count++
+
+                    if(count === 20) {
+                        pokeLive.postValue(poke)
+                    }
                 }
             })
         }
+    }
+
+    fun loadPokemonFav(
+        pokemonNumber: List<String>,
+        pokemonFav: MutableList<Pokemon>
+    ) {
+
+        var count = 0
+
+        pokemonNumber.forEach {
+            val call = RetrofitInitializer.pokeApi.pokeService().pokemon(it)
+
+            call.enqueue(object: Callback<Pokemon> {
+                @SuppressLint("DefaultLocale")
+                override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
+                    response.body()?.let {
+                        pokemonFav.add(it)
+                        count++
+
+                        if (count == pokemonNumber.size) {
+                            pokemonFav.sortBy { it.id }
+
+                            adapter.updateFav(pokemonFav)
+                        }
+                    }
+                }
+
+                override fun onFailure(call: Call<Pokemon>, t: Throwable?) {
+                    Log.e("onFailure error", t?.message)
+                    count++
+
+                    if (count == pokemonNumber.size) {
+                        pokemonFav.sortBy { it.id }
+
+                        adapter.updateFav(pokemonFav)
+                    }
+                }
+            })
+        }
+
     }
 }
