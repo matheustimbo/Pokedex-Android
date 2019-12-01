@@ -48,7 +48,7 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
     @SuppressLint("ClickableViewAccessibility")
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val pokemon = pokemons[position]
-        val ids = if (sharedPref.all["favIds"].toString() == "null") "".split("").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
+        var ids = if (sharedPref.all["favIds"].toString() == "null") "".split(", ").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
         var isFav = false
         System.out.println(sharedPref.all["favIds"])
 
@@ -78,34 +78,31 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             if (isFav) {
 
                 isFav = false
-                val new = mutableListOf<String>()
-                new.addAll(ids.filter {
+
+                ids = if (sharedPref.all["favIds"].toString() == "null") "".split(", ").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
+                ids = (ids.filter {
 
                     it != pokemon.id.toString()
-                })
+                }).toMutableList()
+
                 holder.fav.setColorFilter(ContextCompat.getColor(context, R.color.WHITE), android.graphics.PorterDuff.Mode.SRC_IN)
 
-                update = new.joinToString()
-
-                System.out.println(ids)
-                System.out.println(update)
-                System.out.println(new)
-                System.out.println(sharedPref.all["favIds"])
+                update = ids.joinToString()
 
             } else {
 
                 isFav = true
+
+                ids = if (sharedPref.all["favIds"].toString() == "null") "".split(", ").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
                 ids.add(pokemon.id.toString())
-                update = ids.joinToString()
+
                 holder.fav.setColorFilter(ContextCompat.getColor(context, R.color.RED), android.graphics.PorterDuff.Mode.SRC_IN)
 
-                System.out.println(ids)
-                System.out.println(update)
-                System.out.println(sharedPref.all["favIds"])
+                update = ids.joinToString()
             }
 
-            sharedPref.edit().clear().apply()
             sharedPref.edit().putString("favIds", update).apply()
+
         }
 
     }

@@ -7,6 +7,8 @@ import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
 import android.view.View
+import android.widget.ImageView
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,6 +31,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
     private lateinit var pokeList: RecyclerView
     private lateinit var adapter: PokeAdapter
+    private lateinit var fav: ImageView
     private val pokemons = mutableListOf<Name_Url>()
     private val pokeLive = MutableLiveData<List<Pokemon>>()
     private var lastClickTime = 0L
@@ -42,6 +45,13 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         pokeList = findViewById(R.id.main_recyclerview)
         pokeList.layoutManager = LinearLayoutManager(this)
+
+        fav = findViewById(R.id.fav_button)
+        fav.setColorFilter(ContextCompat.getColor(this, R.color.BLACK), android.graphics.PorterDuff.Mode.SRC_IN)
+        fav.setOnClickListener {
+
+        }
+
 
         adapter = PokeAdapter(this, this)
 
@@ -108,8 +118,6 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
         lastClickTime = SystemClock.elapsedRealtime()
 
         val it = Intent(this, PokemonDetailsActivity::class.java)
-//        val img = view.findViewById<View>(R.id.imageViewCelebrityDetails)
-//        val option = ActivityOptionsCompat.makeSceneTransitionAnimation(this, img, ViewCompat.getTransitionName(img)!!)
 
         it.putExtra("pokemon_position", position)
         startActivity(it)
