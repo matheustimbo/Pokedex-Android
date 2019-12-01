@@ -1,6 +1,7 @@
 package com.example.pokedex.activity
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -38,7 +39,8 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     private lateinit var viewPage: ViewPager
     private lateinit var viewpageadapter: ViewPageAdapter
     private lateinit var constraintLayout: ConstraintLayout
-
+    private lateinit var shareButton: ImageView
+    private val shareIntent = Intent(android.content.Intent.ACTION_SEND)
 
     @SuppressLint("ClickableViewAccessibility")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -46,22 +48,29 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         setContentView(R.layout.activity_pokemon_details)
 
         pokemonId = intent.getIntExtra("pokemon_position", 0) + 1
-        pokemonNome = findViewById(R.id.pokemon_nome)
-        pokemonImagem = findViewById(R.id.pokemon_imagem)
+
+        pokemonNome      = findViewById(R.id.pokemon_nome)
+        pokemonImagem    = findViewById(R.id.pokemon_imagem)
         constraintLayout = findViewById(R.id.constraintLayout_details)
-        pokeId = findViewById(R.id.poke_id)
+        shareButton      = findViewById(R.id.share_button)
+        tabs             = findViewById(R.id.details_poketab)
+        viewPage         = findViewById(R.id.viewpage_details)
+        pokeId           = findViewById(R.id.poke_id)
+
         pokeId.text = pokemonNumber(pokemonId)
 
         carregarPokemon(pokemonId)
-
-        tabs = findViewById(R.id.details_poketab)
-        viewPage = findViewById(R.id.viewpage_details)
 
         viewpageadapter = ViewPageAdapter(supportFragmentManager, pokemonId)
         viewPage.adapter = viewpageadapter
 
         tabs.setupWithViewPager(viewPage)
 
+        shareButton.setOnClickListener {
+
+            shareIntent.setType("text/pain")
+            startActivity(Intent.createChooser(shareIntent, "Compartilhar"))
+        }
     }
 
     fun carregarPokemon(pokemonNumber: Int) {
@@ -82,8 +91,10 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
 
                     it.types.forEach { type ->
                         findViewById<LinearLayout>(Type.valueOf(type.type.name.toUpperCase()).getLinearLayout()).visibility = View.VISIBLE
-
                     }
+
+                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Gostei muito do pokemon " + it.name)
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gostei muito do pokemon " + it.name)
                 }
             }
 
