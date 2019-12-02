@@ -109,7 +109,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
         })
     }
 
-    override fun onClick(view: View, position: Int) {
+    override fun onClick(view: View, id: Int) {
         if (SystemClock.elapsedRealtimeNanos() - lastClickTime < 800) {
             return
         }
@@ -117,7 +117,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
 
         val it = Intent(this, PokemonDetailsActivity::class.java)
 
-        it.putExtra("pokemon_position", position)
+        it.putExtra("pokemon_position", id)
         startActivity(it)
     }
 
