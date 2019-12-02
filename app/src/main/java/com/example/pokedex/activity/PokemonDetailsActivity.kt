@@ -31,6 +31,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     }
 
     private var pokemonId = 0
+    private val link = "https://www.pokemon.com/br/pokedex/"
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
     private lateinit var pokeId: TextView
@@ -93,8 +94,8 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                         findViewById<LinearLayout>(Type.valueOf(type.type.name.toUpperCase()).getLinearLayout()).visibility = View.VISIBLE
                     }
 
-                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Gostei muito do pokemon " + it.name)
-                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gostei muito do pokemon " + it.name)
+                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Gostei muito do pokemon ${it.name} ${link}${it.name}" )
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gostei muito do pokemon ${it.name} ${link}${it.name}")
                 }
             }
 

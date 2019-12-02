@@ -176,10 +176,7 @@ class MainActivity: AppCompatActivity(), PokemonClickListener {
         }
     }
 
-    fun loadPokemonFav(
-        pokemonNumber: List<String>,
-        pokemonFav: MutableList<Pokemon>
-    ) {
+    fun loadPokemonFav(pokemonNumber: List<String>, pokemonFav: MutableList<Pokemon>) {
 
         var count = 0
 

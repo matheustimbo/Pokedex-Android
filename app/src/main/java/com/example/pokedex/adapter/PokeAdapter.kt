@@ -70,7 +70,6 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             }
         }
 
-
         holder.fav.setOnClickListener {
             var update = ""
 
