@@ -4,5 +4,5 @@ import android.view.View
 
 interface PokemonClickListener {
 
-    fun onClick(view: View, position: Int)
+    fun onClick(view: View, id: Int)
 }

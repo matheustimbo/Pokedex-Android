@@ -50,7 +50,7 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
         val pokemon = pokemons[position]
         var ids = if (sharedPref.all["favIds"].toString() == "null") "".split(", ").toMutableList() else sharedPref.all["favIds"].toString().split(", ").toMutableList()
         var isFav = false
-
+    pokemon.id
         Picasso.get().load(pokemon.sprites.front_default).into(holder.imagem)
         holder.nome.text = pokemonNumber(pokemon.id) + " - " + pokemon.name
 
@@ -102,6 +102,10 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
             sharedPref.edit().putString("favIds", update).apply()
         }
 
+        holder.itemView.setOnClickListener{
+            listener.onClick(it, pokemon.id)
+        }
+
     }
 
     class PokeViewHolder(view: View, context: Context, listener: PokemonClickListener): RecyclerView.ViewHolder(view) {
@@ -109,12 +113,6 @@ class PokeAdapter(private val context: Context, val listener: MainActivity): Rec
         val nome: TextView = view.findViewById(R.id.poke_name)
         val cardview: CardView = view.findViewById(R.id.poke_cardview)
         val fav: ImageView = view.findViewById(R.id.fav_pokemon)
-
-        init {
-            view.setOnClickListener{
-                listener.onClick(it, adapterPosition)
-            }
-        }
     }
 
     fun updateList(pokemons: List<Pokemon>) {
