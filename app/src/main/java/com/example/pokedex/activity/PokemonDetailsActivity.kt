@@ -48,7 +48,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pokemon_details)
 
-        pokemonId = intent.getIntExtra("pokemon_position", 0) + 1
+        pokemonId = intent.getIntExtra("pokemon_position", 0)
 
         pokemonNome      = findViewById(R.id.pokemon_nome)
         pokemonImagem    = findViewById(R.id.pokemon_imagem)
@@ -68,8 +68,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         tabs.setupWithViewPager(viewPage)
 
         shareButton.setOnClickListener {
-
-            shareIntent.setType("text/pain")
+            shareIntent.setType("text/*")
             startActivity(Intent.createChooser(shareIntent, "Compartilhar"))
         }
     }
@@ -83,6 +82,7 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                 response.body()?.let {
                     pokemonNome.text = it.name
                     Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
+                    val msg = "Gostei muito do pokemon ${it.name} ${link}${it.name}"
 
                     if(it.types.size != 1) {
                         constraintLayout.setBackgroundResource(Type.valueOf(it.types[1].type.name.toUpperCase()).getColor())
@@ -94,8 +94,8 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
                         findViewById<LinearLayout>(Type.valueOf(type.type.name.toUpperCase()).getLinearLayout()).visibility = View.VISIBLE
                     }
 
-                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Gostei muito do pokemon ${it.name} ${link}${it.name}" )
-                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, "Gostei muito do pokemon ${it.name} ${link}${it.name}")
+                    shareIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, msg)
+                    shareIntent.putExtra(android.content.Intent.EXTRA_TEXT, msg)
                 }
             }
 
