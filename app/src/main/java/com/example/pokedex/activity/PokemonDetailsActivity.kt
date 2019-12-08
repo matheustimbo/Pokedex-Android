@@ -22,6 +22,7 @@ import com.example.pokedex.services.RetrofitInitializer
 import com.example.pokedex.util.Type
 import com.google.android.material.tabs.TabLayout
 import com.squareup.picasso.Picasso
+import org.w3c.dom.Text
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -34,9 +35,11 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
     private val link = "https://www.pokemon.com/br/pokedex/"
     private lateinit var pokemonImagem: ImageView
     private lateinit var pokemonNome: TextView
+    private lateinit var pokemonExp: TextView
+    private lateinit var pokemonPeso: TextView
+    private lateinit var pokemonAltura: TextView
     private lateinit var pokeId: TextView
     private lateinit var tabs: TabLayout
-    private lateinit var status: FragmentStatus
     private lateinit var viewPage: ViewPager
     private lateinit var viewpageadapter: ViewPageAdapter
     private lateinit var constraintLayout: ConstraintLayout
@@ -57,6 +60,9 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
         tabs             = findViewById(R.id.details_poketab)
         viewPage         = findViewById(R.id.viewpage_details)
         pokeId           = findViewById(R.id.poke_id)
+        pokemonExp       = findViewById(R.id.base_exp)
+        pokemonPeso      = findViewById(R.id.pokemon_peso)
+        pokemonAltura    = findViewById(R.id.pokemon_altura)
 
         pokeId.text = pokemonNumber(pokemonId)
 
@@ -80,7 +86,11 @@ class PokemonDetailsActivity : AppCompatActivity(), FragmentStatus.OnFragmentInt
             @SuppressLint("DefaultLocale")
             override fun onResponse(call: Call<Pokemon>, response: Response<Pokemon>) {
                 response.body()?.let {
-                    pokemonNome.text = it.name
+                    pokemonNome.text   = it.name
+                    pokemonExp.text    = "BaseXp: ${it.base_experience}xp"
+                    pokemonPeso.text   = "Peso: ${it.weight.toDouble()/10}kg"
+                    pokemonAltura.text = "Altura: ${it.height.toDouble()/10}m"
+
                     Picasso.get().load(it.sprites.front_default).into(pokemonImagem)
                     val msg = "Gostei muito do pokemon ${it.name} ${link}${it.name}"
 
